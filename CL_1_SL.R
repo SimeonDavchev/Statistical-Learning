@@ -93,6 +93,7 @@ set.seed(1)
 boot(Auto,boot_fn,1000)
 #the results are t1* is intercept, t2* is horsepower and t3* is hpw^2
 
+#this is to test the version control
 
 
 
