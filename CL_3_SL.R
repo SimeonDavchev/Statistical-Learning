@@ -131,6 +131,10 @@ bestlam=cv_out$lambda.min
 lasso_pred=predict(lasso_mod,s=bestlam,newx=x[test,])
 mean((leasso_pred-y_test))
 #PCR----
+library(ISLR)
+Hitters=na.omit(Hitters)
+x= model.matrix(Salary~.,data=Hitters)[,-1]
+y=Hitters$Salary
 library(pls)
 set.seed(2)
 pcr_fit=pcr(Salary~.,data=Hitters,scale=TRUE,validation="CV")
@@ -145,4 +149,8 @@ validationplot(pcr_fit,val.type = "MSEP")
 pcr_pred=predict(pcr_fit,c[test,],ncomp = 7)
 mean((pcr_pred-y_test)^2)
 
+prc_fit= pcr(y~x,scale=TRUE,npcomp=5)
+summary(prc_fit)
+
+answer_sheet[1,2]=1
 
