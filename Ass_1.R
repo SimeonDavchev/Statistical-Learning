@@ -18,7 +18,9 @@
 
 #Dataset_4 A small group of regressors has relatively 
 #large coefficients. Is variable selection a good idea?
-#lasso  
+#lasso may not be a good idea because of the small amount of features
+#also because judging from the optimal parameters it will get almost the same 
+#parameters but will introduce a lot of bias, so perhaps forward?
 
 #Dataset_5 A few latent factors drive all the features, 
 #so the features are strongly correlated. 
@@ -44,7 +46,6 @@ ridge_mod=glmnet(x,y,alpha=0,lambda=best[2,2],thresh=1e-12)
 answer_sheet[,2]=predict(ridge_mod,newx=x)
 
 
-
 #Dataset_2----
 dt2=read.csv("dataset2.csv")
 x=model.matrix(target~.,dt2)[,-1]
@@ -63,11 +64,12 @@ answer_sheet[,4]=predict(ridge_mod,newx = x)
 
 
 #Dataset_4----
+library(leaps)
 dt4=read.csv("dataset4.csv")
-x=model.matrix(target~.,dt4)[,-1]
-y=dt4$target
-lasso_mod=glmnet(x,y,alpha = 1,lambda=best[3,5])
-answer_sheet[,5]=predict(lasso_mod,s=best[3,5],newx=x)
+data.mat=model.matrix(target~.,data=dt4)
+fwd_mod= regsubsets(target~.,data=dt4,nvmax=best[1,5],method="forward")
+fwd_coefi=coef(fwd_mod,best[1,5])
+answer_sheet[,5]=data.mat[,names(fwd_coefi)]%*%fwd_coefi
 
 
 #Dataset_5----
