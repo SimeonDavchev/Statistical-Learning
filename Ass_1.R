@@ -5,14 +5,15 @@
 #Dataset_1 All features are useful.
 #Are the features (highly) correlated? No, so no pcr
 #What can we learn from benchmark tuning parameters?
-#both pcr and fwd use 3 para, so use ridge.
+#both pcr and fwd use 3 para, so use ridge
+#as fwd will use all the parameters and will possibly overfit
 
 #Dataset_2 Only a few features are useful.  
 #Is variable selection a good idea? 
-#lasso 
+#We have a large amount of features with p>n, so lasso
 
 #Dataset_3 All features are relevant for prediction,
-#and their impacts are comparable. so no lasso 
+#and their impacts are comparable. so no lasso as it will force some to 0  
 #Is variable selection a good idea? Ridge 
 
 #Dataset_4 A small group of regressors has relatively 
@@ -22,7 +23,7 @@
 #Dataset_5 A few latent factors drive all the features, 
 #so the features are strongly correlated. 
 #Is dimension reduction a good idea?
-#pcr
+#latent factors and strongly correlated ==> pcr
 
 rm(list = ls())
 answer_sheet=read.csv("Answer_Sheet.csv")
@@ -49,14 +50,12 @@ dt2=read.csv("dataset2.csv")
 x=model.matrix(target~.,dt2)[,-1]
 y=dt2$target
 set.seed(1)
-library(glmnet)
-lasso_mod=glmnet(x,y,alpha = 1)
+lasso_mod=glmnet(x,y,alpha = 1,lambda = best[3,3])
 answer_sheet[,3]=predict(lasso_mod,s=best[3,3],newx=x)
 
 
 #Dataset_3----
 dt3= read.csv("dataset3.csv")
-library(glmnet)
 x= model.matrix(target~., dt3)[,-1]
 y=dt3$target
 ridge_mod=glmnet(x,y,alpha=0,lambda=best[2,4],thresh=1e-12)
@@ -67,20 +66,15 @@ answer_sheet[,4]=predict(ridge_mod,newx = x)
 dt4=read.csv("dataset4.csv")
 x=model.matrix(target~.,dt4)[,-1]
 y=dt4$target
-set.seed(1)
-library(glmnet)
-lasso_mod=glmnet(x,y,alpha = 1)
+lasso_mod=glmnet(x,y,alpha = 1,lambda=best[3,5])
 answer_sheet[,5]=predict(lasso_mod,s=best[3,5],newx=x)
-
 
 
 #Dataset_5----
 library(pls)
 dt5= read.csv("dataset5.csv")
 set.seed(1)
-pcr_fit=pcr(target~.,data=dt5,scale=TRUE,validation="CV")
-summary(pcr_fit)
-validationplot(pcr_fit,val.type = "MSEP")
+pcr_fit=pcr(target~.,data=dt5,scale=TRUE,validation="CV",ncomp = best[4,6])
 answer_sheet[,6]=predict(pcr_fit,ncomp = best[4,6])
 
 write.csv(answer_sheet,"~/Documents/Github/Statistical-Learning/answers.csv")
