@@ -30,21 +30,14 @@
 rm(list = ls())
 answer_sheet=read.csv("Answer_Sheet.csv")
 best=read.csv("bestpara.csv")
+
 #Dataset_1----
-
 dt1=read.csv("dataset1.csv")
-cor(dt1[,2:4]) 
-#the highest corr is 0.12387498 between 2 and 3,
-#so no, there is no significant correlation between the features
-
-#Ridge
 x=model.matrix(target~.,dt1)[,-1]
 y=dt1$target
 library(glmnet)
-set.seed(1)
 ridge_mod=glmnet(x,y,alpha=0,lambda=best[2,2],thresh=1e-12)
 answer_sheet[,2]=predict(ridge_mod,newx=x)
-
 
 #Dataset_2----
 dt2=read.csv("dataset2.csv")
