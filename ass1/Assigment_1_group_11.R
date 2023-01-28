@@ -1,4 +1,5 @@
-#Ass_1
+#Assigment_1_group_11
+#Berat Kuzey Mungan, Diyor Toirov, Simeon Davchev
 
 #Initial Notes:----
 
@@ -20,7 +21,7 @@
 #large coefficients. Is variable selection a good idea?
 #lasso may not be a good idea because of the small amount of features
 #also because judging from the optimal parameters it will get almost the same 
-#parameters but will introduce a lot of bias, so perhaps forward?
+#parameters but will introduce a lot of bias, so perhaps forward
 
 #Dataset_5 A few latent factors drive all the features, 
 #so the features are strongly correlated. 
@@ -28,6 +29,7 @@
 #latent factors and strongly correlated ==> pcr
 
 rm(list = ls())
+setwd("~/Documents/Github/Statistical-Learning/ass1/")
 answer_sheet=read.csv("Answer_Sheet.csv")
 best=read.csv("bestpara.csv")
 
@@ -72,5 +74,5 @@ set.seed(1)
 pcr_fit=pcr(target~.,data=dt5,scale=TRUE,validation="CV",ncomp = best[4,6])
 answer_sheet[,6]=predict(pcr_fit,ncomp = best[4,6])
 
-write.csv(answer_sheet,"~/Documents/Github/Statistical-Learning/answers.csv")
+write.csv(answer_sheet,"~/Documents/Github/Statistical-Learning/ass1/answers.csv")
 
