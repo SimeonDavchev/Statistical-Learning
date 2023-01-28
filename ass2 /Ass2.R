@@ -11,7 +11,7 @@
 #Data Set 5: The population covariance matrices among features are not equal but are very close across target classes. The features are normally distributed within each target class. 
 #logistic
 
-#Iniliase some varibales 
+#Initialise directory and answer sheet 
 rm(list = ls())
 setwd("~/Documents/Github/Statistical-Learning/ass2 /")
 answer_sheet=read.csv("Answer_Sheet.csv")
@@ -52,5 +52,6 @@ log_fit5= glm(target~.,data=dt5,family=binomial)
 log_pred5= predict(log_fit5,dt5)
 answer_sheet[,6]= log_pred5
 
+#Write file with answers 
 write.csv(answer_sheet,"~/Documents/Github/Statistical-Learning/ass2 /answers.csv")
 
